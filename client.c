@@ -20,6 +20,7 @@ void main(void) {
 	HANDLE mailSlot;
 	DWORD bytesWritten;
 	int loops = 2000;
+	planet_type *planet = malloc(492);
 
 	mailSlot = mailslotConnect("mailbox"); 
 
@@ -30,6 +31,8 @@ void main(void) {
 
 						/* NOTE: replace code below for sending planet data to the server. */
 	while(loops-- > 0) {
+
+
 						/* send a friendly greeting to the server */
 					/* NOTE: The messages sent to the server need not to be of equal size.       */
 					/* Messages can be of different sizes as long as they don't exceed the       */
