@@ -21,7 +21,6 @@ void main(void) {
 	DWORD bytesWritten;
 	int loops = 2000;
 	planet_type *planet = malloc(492);
-
 	mailSlot = mailslotConnect("mailbox"); 
 
 	if (mailSlot == INVALID_HANDLE_VALUE) {
@@ -31,13 +30,12 @@ void main(void) {
 
 						/* NOTE: replace code below for sending planet data to the server. */
 	while(loops-- > 0) {
-
-
 						/* send a friendly greeting to the server */
 					/* NOTE: The messages sent to the server need not to be of equal size.       */
 					/* Messages can be of different sizes as long as they don't exceed the       */
 					/* maximum message size that the mailslot can handle (defined upon creation).*/
-    
+		
+		enterPlanet(planet);
 		bytesWritten = mailslotWrite (mailSlot, MESSAGE, strlen(MESSAGE));
 		if (bytesWritten!=-1)
 			printf("data sent to server (bytes = %d)\n", bytesWritten);
@@ -52,3 +50,19 @@ void main(void) {
 	Sleep(2000);
 	return;
 }
+void enterPlanet(planet_type *planet)
+{
+	printf("Please enter your planets name:");
+	fgets(planet->name, 20, stdin);
+	printf("\n Please enter your planets x-axis pos:");
+	scanf_s("%lf", &planet->sx);
+	printf("\n Please enter your planets y-axis pos:");
+	scanf_s("%lf", &planet->sy);
+	printf("\n Please enter your planets x-axis velocity:");
+	scanf_s("%lf", &planet->vx);
+	printf("\n Please enter your planets y-axis velocity:");
+	scanf_s("%lf", &planet->vy);
+	printf("\n Please enter your planets lifetime");
+	scanf_s("%d", &planet->life);
+}
+
