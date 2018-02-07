@@ -71,6 +71,7 @@ void enterPlanet(planet_type *planet)
 	printf("\n Please enter your planets mass: ");
 	scanf_s("%lf", &planet->mass);
 	planet->next = NULL;
+	//planet->pid = tID;
 
 	getchar();
 }
