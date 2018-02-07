@@ -72,7 +72,12 @@ int mailslotWrite(HANDLE mailSlot, void *msg, int msgSize) {
 	/* Write a msg to a mailslot, return nr */
 	/* of successful bytes written         */
 	DWORD bytesWritten;
-	WriteFile(mailSlot,msg,msgSize,&bytesWritten,NULL);
+	HANDLE mailslot = WriteFile(mailSlot,msg,msgSize,&bytesWritten,NULL);
+	if (!mailslot)
+	{
+		printf("Readfile failed with %d", GetLastError());
+		return FALSE;
+	} 
 
 	return bytesWritten;
 }
@@ -83,8 +88,12 @@ int	mailslotRead(HANDLE mailbox, void *msg, int msgSize) {
 	/* of successful bytes read              */
 
 	DWORD bytesRead;
-	ReadFile(mailbox, msg, msgSize, &bytesRead, NULL);
-
+	HANDLE mailslot = ReadFile(mailbox, msg, msgSize, &bytesRead, NULL);
+	if (!mailslot)
+	{
+		printf("Readfile failed with %d", GetLastError());
+		return FALSE;
+	}
 
 
 	return bytesRead;
