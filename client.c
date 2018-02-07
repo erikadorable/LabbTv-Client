@@ -14,14 +14,14 @@
 #include "wrapper.h"
 
 #define MESSAGE "Hello!"
-
+void enterPlanet(planet_type *planet);
 void main(void) {
 
 	HANDLE mailSlot;
 	DWORD bytesWritten;
 	int loops = 2000;
 	planet_type *planet = malloc(492);
-	mailSlot = mailslotConnect("mailbox"); 
+	mailSlot = mailslotConnect("\\\\.\\mailslot\\mailslot"); 
 
 	if (mailSlot == INVALID_HANDLE_VALUE) {
 		printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
