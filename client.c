@@ -14,16 +14,20 @@
 #include "wrapper.h"
 
 #define MESSAGE "Hello!"
+LPTSTR Slot = TEXT("\\\\.\\mailslot\\mailslot");
 void enterPlanet(planet_type *planet);
 void main(void) {
 
-	HANDLE mailSlot;
+	HANDLE hWrite;
+	HANDLE hRead;
 	DWORD bytesWritten;
 	int loops = 2000;
-	planet_type *planet = malloc(492);
-	mailSlot = mailslotConnect("\\\\.\\mailslot\\mailslot"); 
+	planet_type *planet = malloc(sizeof(planet_type));
+	
+	hWrite = mailslotConnect(Slot); 
 
-	if (mailSlot == INVALID_HANDLE_VALUE) {
+
+	if (hWrite == INVALID_HANDLE_VALUE) {
 		printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
 		return;
 	}
@@ -36,14 +40,14 @@ void main(void) {
 					/* maximum message size that the mailslot can handle (defined upon creation).*/
 		
 		enterPlanet(planet);
-		bytesWritten = mailslotWrite (mailSlot, MESSAGE, strlen(MESSAGE));
+		bytesWritten = mailslotWrite (hWrite, planet, sizeof(planet_type));
 		if (bytesWritten!=-1)
 			printf("data sent to server (bytes = %d)\n", bytesWritten);
 		else
 			printf("failed sending data to server\n");
 	}
 
-	mailslotClose (mailSlot);
+	mailslotClose(hWrite);
 
 					/* (sleep for a while, enables you to catch a glimpse of what the */
 					/*  client prints on the console)                                 */
@@ -52,7 +56,7 @@ void main(void) {
 }
 void enterPlanet(planet_type *planet)
 {
-	printf("Please enter your planets name:");
+	printf(" Please enter your planets name:");
 	fgets(planet->name, 20, stdin);
 	printf("\n Please enter your planets x-axis pos:");
 	scanf_s("%lf", &planet->sx);
@@ -62,7 +66,12 @@ void enterPlanet(planet_type *planet)
 	scanf_s("%lf", &planet->vx);
 	printf("\n Please enter your planets y-axis velocity:");
 	scanf_s("%lf", &planet->vy);
-	printf("\n Please enter your planets lifetime");
+	printf("\n Please enter your planets lifetime: ");
 	scanf_s("%d", &planet->life);
+	printf("\n Please enter your planets mass: ");
+	scanf_s("%lf", &planet->mass);
+	planet->next = NULL;
+
+	getchar();
 }
 
