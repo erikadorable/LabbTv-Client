@@ -21,6 +21,10 @@ void main(void) {
 	DWORD bytesWritten;
 	int loops = 2000;
 	planet_type *planet = malloc(492);
+<<<<<<< HEAD
+
+=======
+>>>>>>> 154175d6f82ef50d5dd2911a3a621af12a814af3
 	mailSlot = mailslotConnect("mailbox"); 
 
 	if (mailSlot == INVALID_HANDLE_VALUE) {
@@ -30,6 +34,8 @@ void main(void) {
 
 						/* NOTE: replace code below for sending planet data to the server. */
 	while(loops-- > 0) {
+
+
 						/* send a friendly greeting to the server */
 					/* NOTE: The messages sent to the server need not to be of equal size.       */
 					/* Messages can be of different sizes as long as they don't exceed the       */
@@ -52,17 +58,19 @@ void main(void) {
 }
 void enterPlanet(planet_type *planet)
 {
-	printf("Please enter your planets name:");
+
+	printf("Please enter your planets name: ");
 	fgets(planet->name, 20, stdin);
-	printf("\n Please enter your planets x-axis pos:");
+	printf("\nPlease enter your planets x-axis pos: ");
 	scanf_s("%lf", &planet->sx);
-	printf("\n Please enter your planets y-axis pos:");
+	printf("\nPlease enter your planets y-axis pos: ");
 	scanf_s("%lf", &planet->sy);
-	printf("\n Please enter your planets x-axis velocity:");
+	printf("\nPlease enter your planets x-axis velocity: ");
 	scanf_s("%lf", &planet->vx);
-	printf("\n Please enter your planets y-axis velocity:");
+	printf("\nPlease enter your planets y-axis velocity: ");
 	scanf_s("%lf", &planet->vy);
-	printf("\n Please enter your planets lifetime");
+	printf("\nPlease enter your planets lifetime: ");
 	scanf_s("%d", &planet->life);
+	fflush(stdin);
 }
 
