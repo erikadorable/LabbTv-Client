@@ -28,7 +28,7 @@ void main(void) {
 	
 	hWrite = mailslotConnect(Slot); 
 
-	threadCreate((void*)readFromServer, NULL);
+	//threadCreate((void*)readFromServer, NULL);
 
 
 	if (hWrite == INVALID_HANDLE_VALUE) {
@@ -83,9 +83,9 @@ void enterPlanet(planet_type *planet)
 
 void readFromServer(void *deadPlanetMsg) {
 
-	HANDLE mailbox = mailslotCreate("\\\\.\\mailslot\\mailslot");
+	
 	char messageFromMailbox[130] = { 0 };
-	DWORD bytesRead = mailslotRead(mailbox, messageFromMailbox ,130);
+	DWORD bytesRead = mailslotRead(Slot, messageFromMailbox ,130);
 
 	printf("%s", &messageFromMailbox);
 
