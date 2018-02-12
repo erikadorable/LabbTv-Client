@@ -16,6 +16,8 @@
 #define MESSAGE "Hello!"
 LPTSTR Slot = TEXT("\\\\.\\mailslot\\mailslot");
 void enterPlanet(planet_type *planet);
+void readFromServer(void *deadPlanetMsg);
+
 void main(void) {
 
 	HANDLE hWrite;
@@ -25,6 +27,8 @@ void main(void) {
 	planet_type *planet = malloc(sizeof(planet_type));
 	
 	hWrite = mailslotConnect(Slot); 
+
+	threadCreate((void*)readFromServer, NULL);
 
 
 	if (hWrite == INVALID_HANDLE_VALUE) {
@@ -70,9 +74,22 @@ void enterPlanet(planet_type *planet)
 	scanf_s("%d", &planet->life);
 	printf("\n Please enter your planets mass: ");
 	scanf_s("%lf", &planet->mass);
+	printf(" Please make up some very random pid(use both numbers and letters):");
+	fgets(planet->pid, 30, stdin);
 	planet->next = NULL;
-	//planet->pid = tID;
 
 	getchar();
+}
+
+void readFromServer(void *deadPlanetMsg) {
+
+	HANDLE mailbox = mailslotCreate("\\\\.\\mailslot\\mailslot");
+	char messageFromMailbox[130] = { 0 };
+	DWORD bytesRead = mailslotRead(mailbox, messageFromMailbox ,130);
+
+	printf("%s", &messageFromMailbox);
+
+
+
 }
 
