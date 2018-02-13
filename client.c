@@ -77,8 +77,6 @@ void enterPlanet(planet_type *planet)
 	printf(" Please make up some very random pid(use both numbers and letters):");
 	fgets(planet->pid, 30, stdin);
 	planet->next = NULL;
-
-	getchar();
 }
 
 void readFromServer(void *deadPlanetMsg) {
