@@ -16,7 +16,7 @@
 #define MESSAGE "Hello!"
 LPTSTR Slot = TEXT("\\\\.\\mailslot\\mailslot");
 void enterPlanet(planet_type *planet);
-void readFromServer(void *deadPlanetMsg);
+void readFromServerThread(void);
 
 void main(void) {
 
@@ -53,6 +53,9 @@ void main(void) {
 
 	mailslotClose(hWrite);
 
+	threadCreate(readFromServerThread, INFINITE);
+
+
 					/* (sleep for a while, enables you to catch a glimpse of what the */
 					/*  client prints on the console)                                 */
 	Sleep(2000);
@@ -60,6 +63,7 @@ void main(void) {
 }
 void enterPlanet(planet_type *planet)
 {
+	
 	printf(" Please enter your planets name:");
 	fgets(planet->name, 20, stdin);
 	printf("\n Please enter your planets x-axis pos:");
@@ -74,17 +78,22 @@ void enterPlanet(planet_type *planet)
 	scanf_s("%d", &planet->life);
 	printf("\n Please enter your planets mass: ");
 	scanf_s("%lf", &planet->mass);
-	printf(" Please make up some very random pid(use both numbers and letters):");
-	fgets(planet->pid, 30, stdin);
+	getchar();
+	*planet->pid = GetCurrentProcessesId();
+
+
 	planet->next = NULL;
+
 }
 
-void readFromServer(void *deadPlanetMsg) {
+void readFromServerThread(void) {
 
-	
-	char messageFromMailbox[130] = { 0 };
-	DWORD bytesRead = mailslotRead(Slot, messageFromMailbox ,130);
 
+	char messageFromMailbox[130];
+	char SlotWithPid[50];
+	sprintf(SlotWithPid, "\\\\.\\mailslot\\%d", GetCurrentProcessId());
+
+	DWORD bytesRead = mailslotRead(SlotWithPid, messageFromMailbox ,130);
 	printf("%s", &messageFromMailbox);
 
 
