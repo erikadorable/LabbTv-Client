@@ -13,6 +13,7 @@
 #include <string.h>
 #include "wrapper.h"
 
+
 #define MESSAGE "Hello!"
 LPTSTR Slot = TEXT("\\\\.\\mailslot\\mailslot");
 void enterPlanet(planet_type *planet);
@@ -24,7 +25,7 @@ void main(void) {
 	HANDLE hRead;
 	DWORD bytesWritten;
 	int loops = 2000;
-	planet_type *planet = malloc(sizeof(planet_type));
+	planet_type *planet = (planet_type*)malloc(sizeof(planet_type*));
 	
 	hWrite = mailslotConnect(Slot); 
 
@@ -67,22 +68,27 @@ void enterPlanet(planet_type *planet)
 	printf(" Please enter your planets name:");
 	fgets(planet->name, 20, stdin);
 	printf("\n Please enter your planets x-axis pos:");
-	scanf_s("%lf", &planet->sx);
+	scanf_s("%lf", planet->sx);
 	printf("\n Please enter your planets y-axis pos:");
-	scanf_s("%lf", &planet->sy);
+	scanf_s("%lf", planet->sy);
 	printf("\n Please enter your planets x-axis velocity:");
-	scanf_s("%lf", &planet->vx);
+	scanf_s("%lf", planet->vx);
 	printf("\n Please enter your planets y-axis velocity:");
-	scanf_s("%lf", &planet->vy);
+	scanf_s("%lf", planet->vy);
 	printf("\n Please enter your planets lifetime: ");
-	scanf_s("%d", &planet->life);
+	scanf_s("%d", planet->life);
 	printf("\n Please enter your planets mass: ");
-	scanf_s("%lf", &planet->mass);
+	scanf_s("%lf", planet->mass);
 	getchar();
-	*planet->pid = GetCurrentProcessesId();
+	int i = GetCurrentProcessId();
+	char hej[50];
+	sprintf(hej,"%d",i);
+	strcpy(planet->pid, 30, hej);
+	
+	
 
 
-	planet->next = NULL;
+	
 
 }
 
