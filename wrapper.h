@@ -34,7 +34,7 @@ typedef struct pt {
 	double		mass;		// Planet mass
 	struct pt*	next;		// Pointer to next planet in linked list
 	int			life;		// Planet life
-	char		pid[30];	// String containing ID of creating process
+	DWORD		pid[30];	// String containing ID of creating process
 } planet_type;
 
 #endif /* WRAPPER_H */
