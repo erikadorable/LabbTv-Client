@@ -55,7 +55,7 @@ void main(void) {
 
 	mailslotClose(hWrite);
 
-	threadCreate(readFromServerThread, INFINITE);
+	threadCreate(readFromServerThread, NULL);
 
 
 					/* (sleep for a while, enables you to catch a glimpse of what the */
