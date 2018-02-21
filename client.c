@@ -23,21 +23,17 @@ void readFromServerThread(void);
 void main(void) {
 
 	HANDLE hWrite;
-	HANDLE hRead;
+	
 	DWORD bytesWritten;
 	int loops = 2000;
 	planet_type *planet = (planet_type*)malloc(sizeof(planet_type));
 	
 	hWrite = mailslotConnect(Slot); 
-
-	//threadCreate((void*)readFromServer, NULL);
-
-
 	if (hWrite == INVALID_HANDLE_VALUE) {
 		printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
 		return;
 	}
-
+	threadCreate(readFromServerThread, NULL);
 						/* NOTE: replace code below for sending planet data to the server. */
 	while(loops-- > 0) {
 						/* send a friendly greeting to the server */
@@ -51,16 +47,19 @@ void main(void) {
 			printf("data sent to server (bytes = %d)\n", bytesWritten);
 		else
 			printf("failed sending data to server\n");
+		;
 	}
 
 	mailslotClose(hWrite);
+	
 
-	threadCreate(readFromServerThread, NULL);
+	
 
 
 					/* (sleep for a while, enables you to catch a glimpse of what the */
 					/*  client prints on the console)                                 */
 	Sleep(2000);
+	system("pause");
 	return;
 }
 void enterPlanet(planet_type *planet)
@@ -96,14 +95,27 @@ void enterPlanet(planet_type *planet)
 void readFromServerThread(void) {
 
 
-	char messageFromMailbox[130];
-	char SlotWithPid[50];
-	sprintf(SlotWithPid, "\\\\.\\mailslot%d", GetCurrentProcessId());
-
-	DWORD bytesRead = mailslotRead(SlotWithPid, messageFromMailbox ,130);
-	printf("%s", &messageFromMailbox);
-
-
+	char messageFromMailbox[50];
+	char SlotWithPid[50] = "\\\\.\\mailslot\\";
+	int i = GetCurrentProcessId();
+	char kuk[30];
+	sprintf(kuk, "%lu", i);
+	strcat(SlotWithPid,kuk);
+	HANDLE hRead = mailslotCreate(SlotWithPid); // erika är bäst
+	if (hRead == INVALID_HANDLE_VALUE) {
+		printf("Failed to get a handle to the mailslot!");
+		return;
+	}
+	while (TRUE)
+	{
+		DWORD bytesRead = mailslotRead(hRead, messageFromMailbox, strlen(messageFromMailbox));
+		if (bytesRead > 0)
+		{
+			printf("%s", messageFromMailbox);
+		}
+		Sleep(1000);
+	}
+	
 
 }
 
